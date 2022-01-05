@@ -10,14 +10,14 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using UnicodeToKantipur.Models;
-using static UnicodeToKantipur.Models.UnicodeModel;
+using UnicodeConverter.Models;
+using static UnicodeConverter.Models.UnicodeModel;
 
-namespace UnicodeToKantipur.Controllers
+namespace UnicodeConverter.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
     [ApiController]
-    public class UnicodeToKantipurController : ControllerBase
+    public class UnicodeConverterController : ControllerBase
     {
         private static Dictionary<string, string> myDictionary;
         string BaseUrl = "https://inputtools.google.com/";
@@ -37,7 +37,7 @@ namespace UnicodeToKantipur.Controllers
 
         [HttpPost]
         [Route("ConvertUnicode")]
-        public string ConvertUnicode(string nepaliUnicode)
+        private string ConvertUnicode(string nepaliUnicode)
         {
             Dictionary<string, string> l = new Dictionary<string, string>();
             l.Add("320", " ");        //
@@ -175,7 +175,7 @@ namespace UnicodeToKantipur.Controllers
         }
         [HttpPost]
         [Route("ConvertUnicodeWithEnglish")]
-        public string ConvertUnicodeWithEnglish(string InputString)
+        private string ConvertUnicodeWithEnglish(string InputString)
         {
             var myarray = Encoding.Unicode.GetBytes(InputString);
             StringBuilder str = new StringBuilder();
@@ -196,7 +196,7 @@ namespace UnicodeToKantipur.Controllers
         }
 
         [HttpPost]
-        [Route("ConvertEnglishToUnicode")]
+        [Route("GetUnicode")]
         public async Task<UnicodeModel> ConvertEnglishToUnicode(string text)//, string language)
         {
             try

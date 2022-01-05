@@ -41,7 +41,7 @@ namespace UnicodeToKantipur
                 c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
                 {
                     Version = "v1",
-                    Title = "Convert to Unicode Nepali",
+                    Title = "Convert to Unicode Nepali by @manoj",
                     Description = "Convert to Unicode Nepali you can easily convert your text to unicode nepali.",
                     //TermsOfService = "UnicodeToKantipur",
                     Contact = new Microsoft.OpenApi.Models.OpenApiContact
