@@ -7,12 +7,13 @@ function inputFieldFunction() {
 
 }
 
+
 function doStuff(data) {
     var sliceData = data.trim().split(" ").pop();
     if (data.endsWith(" ")) {
         $.ajax({
             type: 'POST',
-            url: 'https://localhost:44300/GetUnicode?text=' + sliceData,
+            url: 'https://unicodeapi2.kanchibazaar.com/GetUnicode?text=' + sliceData,
             dataType: "json",
             crossDomain: true,
             success: function (msg) {
@@ -29,9 +30,9 @@ function doStuff(data) {
             },
             error: function (request, status, error) {
 
-                console.log(request);
-                console.log(status);
-                console.log(error);
+                //console.log(request);
+                //console.log(status);
+                //console.log(error);
             }
         });
     }
