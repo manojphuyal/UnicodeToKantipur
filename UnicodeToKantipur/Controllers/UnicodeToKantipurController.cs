@@ -201,32 +201,40 @@ namespace UnicodeToKantipur.Controllers
         {
             try
             {
-                using (var data = new HttpClient())
+                if (string.IsNullOrWhiteSpace(text))
                 {
-                    data.BaseAddress = new Uri(BaseUrl);
-                    data.DefaultRequestHeaders.Clear();
-                    data.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    HttpResponseMessage Res = await data.GetAsync("request?text=" + text + "&itc=ne-t-i0-und&num=13&cp=0&cs=1&ie=utf-8&oe=utf-8&app=demopage");
                     UnicodeModel unicodeModel = new UnicodeModel();
-                    List<UnicodeOptionDto> unicodeList = new List<UnicodeOptionDto>();
-                    if (Res.IsSuccessStatusCode)
-                    {
-                        var CategoryResponse = Res.Content.ReadAsStringAsync().Result;
-                        JArray jsonArray = JArray.Parse(CategoryResponse);
-                        unicodeModel.Message = jsonArray[0].ToString();
-                        unicodeModel.InputText = jsonArray[1][0][0].ToString();
-                        unicodeModel.UnicodeOptionFirst = jsonArray[1][0][1][0].ToString();
-                        foreach (var a in jsonArray[1][0][1])
-                        {
-                            var uOption = new UnicodeOptionDto
-                            {
-                                UnicodeOption = a.ToString()
-                            };
-                            unicodeList.Add(uOption);
-                        }
-                        unicodeModel.UnicodeOptionDtos = unicodeList;
-                    }
                     return await Task.FromResult(unicodeModel);
+                }
+                else
+                {
+                    using (var data = new HttpClient())
+                    {
+                        data.BaseAddress = new Uri(BaseUrl);
+                        data.DefaultRequestHeaders.Clear();
+                        data.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        HttpResponseMessage Res = await data.GetAsync("request?text=" + text + "&itc=ne-t-i0-und&num=13&cp=0&cs=1&ie=utf-8&oe=utf-8&app=demopage");
+                        UnicodeModel unicodeModel = new UnicodeModel();
+                        List<UnicodeOptionDto> unicodeList = new List<UnicodeOptionDto>();
+                        if (Res.IsSuccessStatusCode)
+                        {
+                            var CategoryResponse = Res.Content.ReadAsStringAsync().Result;
+                            JArray jsonArray = JArray.Parse(CategoryResponse);
+                            unicodeModel.Message = jsonArray[0].ToString();
+                            unicodeModel.InputText = jsonArray[1][0][0].ToString();
+                            unicodeModel.UnicodeOptionFirst = jsonArray[1][0][1][0].ToString();
+                            foreach (var a in jsonArray[1][0][1])
+                            {
+                                var uOption = new UnicodeOptionDto
+                                {
+                                    UnicodeOption = a.ToString()
+                                };
+                                unicodeList.Add(uOption);
+                            }
+                            unicodeModel.UnicodeOptionDtos = unicodeList;
+                        }
+                        return await Task.FromResult(unicodeModel);
+                    }
                 }
             }
             catch (Exception ex)
