@@ -10,6 +10,8 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using UnicodeToKantipur.Models;
+using static UnicodeToKantipur.Models.UnicodeModel;
 
 namespace UnicodeToKantipur.Controllers
 {
@@ -195,35 +197,36 @@ namespace UnicodeToKantipur.Controllers
 
         [HttpPost]
         [Route("ConvertEnglishToUnicode")]
-        public async Task<JsonResult> ConvertEnglishToUnicode(string text)//, string language)
+        public async Task<UnicodeModel> ConvertEnglishToUnicode(string text)//, string language)
         {
             try
             {
-                //Category categoryData = new Category();
                 using (var data = new HttpClient())
                 {
                     data.BaseAddress = new Uri(BaseUrl);
                     data.DefaultRequestHeaders.Clear();
                     data.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                     HttpResponseMessage Res = await data.GetAsync("request?text=" + text + "&itc=ne-t-i0-und&num=13&cp=0&cs=1&ie=utf-8&oe=utf-8&app=demopage");
-                    object d = new object();
+                    UnicodeModel unicodeModel = new UnicodeModel();
+                    List<UnicodeOptionDto> unicodeList = new List<UnicodeOptionDto>();
                     if (Res.IsSuccessStatusCode)
                     {
                         var CategoryResponse = Res.Content.ReadAsStringAsync().Result;
-                        d = JsonConvert.DeserializeObject(CategoryResponse);
+                        JArray jsonArray = JArray.Parse(CategoryResponse);
+                        unicodeModel.Message = jsonArray[0].ToString();
+                        unicodeModel.InputText = jsonArray[1][0][0].ToString();
+                        unicodeModel.UnicodeOptionFirst = jsonArray[1][0][1][0].ToString();
+                        foreach (var a in jsonArray[1][0][1])
+                        {
+                            var uOption = new UnicodeOptionDto
+                            {
+                                UnicodeOption = a.ToString()
+                            };
+                            unicodeList.Add(uOption);
+                        }
+                        unicodeModel.UnicodeOptionDtos = unicodeList;
                     }
-                    return (JsonResult)d;
-
-                    //return new CategoryDto
-                    //{
-                    //    total_records = categoryData.total_records,
-                    //    response_code = categoryData.response_code,
-                    //    data = categoryData.data.Select(x => new CategoryDataDto
-                    //    {
-                    //        CategoryId = x.CategoryId,
-                    //        CategoryName = x.CategoryName
-                    //    }).ToList()
-                    //};
+                    return await Task.FromResult(unicodeModel);
                 }
             }
             catch (Exception ex)
