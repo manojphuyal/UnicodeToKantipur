@@ -17,7 +17,7 @@ function doStuff(data) {
             dataType: "json",
             crossDomain: true,
             success: function (msg) {
-                debugger;
+                //debugger;
                 var a =  msg.unicodeOptionFirst
                 var d = data.replace(sliceData, msg.unicodeOptionFirst);
 

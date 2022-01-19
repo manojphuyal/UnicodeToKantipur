@@ -27,7 +27,15 @@ namespace UnicodeToKantipur
         {
             services.AddCors(options =>
             {
-                options.AddPolicy("EnableCORS", builder => {
+                options.AddDefaultPolicy(builder => 
+                {
+                    builder.WithOrigins("https://unicodeweb.ystanddance.com")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+                options.AddPolicy("AllowAll", builder =>
+                {
                     builder.AllowAnyOrigin()
                         .AllowAnyHeader()
                         .AllowAnyMethod();
