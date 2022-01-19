@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\main.js" />
+    <None Include="wwwroot\js\main.js" />
   </ItemGroup>
 
 </Project>
